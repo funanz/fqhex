@@ -70,16 +70,16 @@ namespace fqhex::detail
     class hex8_ssse3
     {
     public:
-        static void to_bytes_64(std::span<const CharT> in, std::span<ByteT> out) {
-            auto x = _mm_loadu_si128(reinterpret_cast<const __m128i*>(in.data()));
+        static void to_bytes_64(const CharT in[16], ByteT out[8]) {
+            auto x = _mm_loadu_si128(reinterpret_cast<const __m128i*>(in));
             auto b = ssse3::char8_to_bytes(x);
-            _mm_storeu_si64(out.data(), b);
+            _mm_storeu_si64(out, b);
         }
 
-        static void to_string_64(std::span<const ByteT> in, std::span<CharT> out) {
-            auto x = _mm_loadu_si64(in.data());
+        static void to_string_64(const ByteT in[8], CharT out[16]) {
+            auto x = _mm_loadu_si64(in);
             auto s = ssse3::bytes_to_char8(x);
-            _mm_storeu_si128(reinterpret_cast<__m128i*>(out.data()), s);
+            _mm_storeu_si128(reinterpret_cast<__m128i*>(out), s);
         }
     };
 
@@ -92,8 +92,8 @@ namespace fqhex::detail
             return _mm_movemask_epi8(mask) != 0;
         }
 
-        static __m128i char16to8(std::span<const CharT> in) {
-            auto s = _mm_loadu_si128(reinterpret_cast<const __m128i*>(in.data()));
+        static __m128i char16to8(const CharT in[8]) {
+            auto s = _mm_loadu_si128(reinterpret_cast<const __m128i*>(in));
 
             if (has_invalid_chars(s))
                 throw std::invalid_argument("invalid hex character");
@@ -104,16 +104,16 @@ namespace fqhex::detail
         }
 
     public:
-        static void to_bytes_64(std::span<const CharT> in, std::span<ByteT> out) {
-            auto s0 = char16to8(in.subspan(0, 8));
-            auto s1 = char16to8(in.subspan(8, 8));
+        static void to_bytes_64(const CharT in[16], ByteT out[8]) {
+            auto s0 = char16to8(&in[0]);
+            auto s1 = char16to8(&in[8]);
             auto s = _mm_or_si128(_mm_slli_si128(s1, 8), s0);
             auto b = ssse3::char8_to_bytes(s);
-            _mm_storeu_si64(out.data(), b);
+            _mm_storeu_si64(out, b);
         }
 
-        static void to_string_64(std::span<const ByteT> in, std::span<CharT> out) {
-            auto x = _mm_loadu_si64(in.data());
+        static void to_string_64(const ByteT in[8], CharT out[16]) {
+            auto x = _mm_loadu_si64(in);
             auto s = ssse3::bytes_to_char8(x);
             auto s0 = _mm_unpacklo_epi8(s, _mm_setzero_si128());
             auto s1 = _mm_unpacklo_epi8(_mm_srli_si128(s, 8), _mm_setzero_si128());
@@ -131,8 +131,8 @@ namespace fqhex::detail
             return _mm_movemask_epi8(mask) != 0;
         }
 
-        static __m128i char32to8(std::span<const CharT> in) {
-            auto s = _mm_loadu_si128(reinterpret_cast<const __m128i*>(in.data()));
+        static __m128i char32to8(const CharT in[4]) {
+            auto s = _mm_loadu_si128(reinterpret_cast<const __m128i*>(in));
 
             if (has_invalid_chars(s))
                 throw std::invalid_argument("invalid hex character");
@@ -143,21 +143,21 @@ namespace fqhex::detail
         }
 
     public:
-        static void to_bytes_64(std::span<const CharT> in, std::span<ByteT> out) {
-            auto s0 = char32to8(in.subspan(0, 4));
-            auto s1 = char32to8(in.subspan(4, 4));
-            auto s2 = char32to8(in.subspan(8, 4));
-            auto s3 = char32to8(in.subspan(12, 4));
+        static void to_bytes_64(const CharT in[16], ByteT out[8]) {
+            auto s0 = char32to8(&in[0]);
+            auto s1 = char32to8(&in[4]);
+            auto s2 = char32to8(&in[8]);
+            auto s3 = char32to8(&in[12]);
             auto s = _mm_or_si128(s0, _mm_slli_si128(s1, 4));
             s = _mm_or_si128(s, _mm_slli_si128(s2, 8));
             s = _mm_or_si128(s, _mm_slli_si128(s3, 12));
 
             auto b = ssse3::char8_to_bytes(s);
-            _mm_storeu_si64(out.data(), b);
+            _mm_storeu_si64(out, b);
         }
 
-        static void to_string_64(std::span<const ByteT> in, std::span<CharT> out) {
-            auto x = _mm_loadu_si64(in.data());
+        static void to_string_64(const ByteT in[8], CharT out[16]) {
+            auto x = _mm_loadu_si64(in);
             auto s = ssse3::bytes_to_char8(x);
 
             auto s16lo = _mm_unpacklo_epi8(s, _mm_setzero_si128());
@@ -186,7 +186,7 @@ namespace fqhex
         using byte_type = ByteT;
 
     private:
-        static void to_bytes_64(std::span<const CharT> in, std::span<ByteT> out) {
+        static void to_bytes_64(const CharT in[16], ByteT out[8]) {
             if constexpr (sizeof(CharT) == 1)
                 detail::hex8_ssse3<CharT, ByteT>::to_bytes_64(in, out);
             else if constexpr (sizeof(CharT) == 2)
@@ -195,7 +195,7 @@ namespace fqhex
                 detail::hex32_ssse3<CharT, ByteT>::to_bytes_64(in, out);
         }
 
-        static void to_string_64(std::span<const ByteT> in, std::span<CharT> out) {
+        static void to_string_64(const ByteT in[8], CharT out[16]) {
             if constexpr (sizeof(CharT) == 1)
                 detail::hex8_ssse3<CharT, ByteT>::to_string_64(in, out);
             else if constexpr (sizeof(CharT) == 2)
@@ -211,7 +211,7 @@ namespace fqhex
 
             auto count = in.size() / 16;
             for (size_t i = 0; i < count; i++)
-                to_bytes_64(in.subspan(i * 16), out.subspan(i * 8));
+                to_bytes_64(&in[i * 16], &out[i * 8]);
 
             if (in.size() % 16 >= 2)
                 hex_generic<CharT, ByteT>::to_bytes(in.subspan(count * 16), out.subspan(count * 8));
@@ -223,7 +223,7 @@ namespace fqhex
 
             auto count = in.size() / 8;
             for (size_t i = 0; i < count; i++)
-                to_string_64(in.subspan(i * 8), out.subspan(i * 16));
+                to_string_64(&in[i * 8], &out[i * 16]);
 
             if (in.size() % 8 > 0)
                 hex_generic<CharT, ByteT>::to_string(in.subspan(count * 8), out.subspan(count * 16));
