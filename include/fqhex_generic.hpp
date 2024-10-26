@@ -32,7 +32,7 @@ namespace fqhex
         }();
 
         static constexpr uint_fast32_t hex_to_u4(CharT c) {
-            if (sizeof(c) > 1) {
+            if constexpr (sizeof(c) > 1) {
                 if (static_cast<size_t>(c) > 0xff)
                     return -1;
             }
