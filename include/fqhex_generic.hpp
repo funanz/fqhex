@@ -1,9 +1,10 @@
 // Copyright 2024 granz.fisherman@gmail.com
 // https://opensource.org/license/mit
 #pragma once
-#include <span>
 #include <cstdint>
+#include <span>
 #include <stdexcept>
+#include <string>
 
 namespace fqhex
 {
@@ -79,6 +80,12 @@ namespace fqhex
                 out[i * 2] = u4_to_hex(in[i] >> 4);
                 out[i * 2 + 1] = u4_to_hex(in[i]);
             }
+        }
+
+        static auto to_string(std::span<const ByteT> in) {
+            std::basic_string<CharT> s(in.size() * 2, 0);
+            to_string(in, s);
+            return s;
         }
     };
 }

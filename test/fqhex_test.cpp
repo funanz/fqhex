@@ -81,8 +81,7 @@ static void test_parse1()
     std::array<ByteT, 16> b2;
     Hex::to_bytes(s1, b2);
 
-    String s2(b1.size() * 2, S('*'));
-    Hex::to_string(b1, s2);
+    String s2 = Hex::to_string(b1);
 
     runtime_assert(b1 == b2, "test_parse1 #1");
     runtime_assert(to_lower(s1) == s2, "test_parse1 #2");

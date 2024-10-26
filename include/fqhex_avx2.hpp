@@ -1,9 +1,10 @@
 // Copyright 2024 granz.fisherman@gmail.com
 // https://opensource.org/license/mit
 #pragma once
-#include <span>
 #include <cstdint>
+#include <span>
 #include <stdexcept>
+#include <string>
 #include <immintrin.h>
 #include "fqhex_generic.hpp"
 
@@ -235,6 +236,12 @@ namespace fqhex
 
             if (in.size() % 8 > 0)
                 hex_generic<CharT, ByteT>::to_string(in.subspan(count * 16), out.subspan(count * 32));
+        }
+
+        static auto to_string(std::span<const ByteT> in) {
+            std::basic_string<CharT> s(in.size() * 2, 0);
+            to_string(in, s);
+            return s;
         }
     };
 }
