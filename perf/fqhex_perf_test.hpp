@@ -9,7 +9,6 @@
 #include <span>
 #include <string>
 #include <vector>
-#include <fqhex.hpp>
 #include "ops_measure.hpp"
 
 namespace fqhex
@@ -21,7 +20,7 @@ namespace fqhex
         using ByteT = Hex::byte_type;
 
         std::string name_;
-        double time_ = 5;
+        double time_ = 1;
 
         void test_to_bytes() {
             std::mt19937_64 rng;

@@ -65,6 +65,14 @@ if (UNIX)
   target_compile_options(fqhex-test-ssse3-char PRIVATE -Wall -D_GLIBCXX_DEBUG -mssse3)
 endif()
 
+# fqhex-test-ssse3-wchar
+add_executable(fqhex-test-ssse3-wchar test/fqhex_test.cpp)
+target_compile_features(fqhex-test-ssse3-wchar PUBLIC cxx_std_20)
+target_compile_options(fqhex-test-ssse3-wchar PRIVATE -DCHAR_MODE=1632 -DHAVE_SSSE3=1632)
+if (UNIX)
+  target_compile_options(fqhex-test-ssse3-wchar PRIVATE -Wall -D_GLIBCXX_DEBUG -mssse3)
+endif()
+
 # fqhex-test-ssse3-char8
 add_executable(fqhex-test-ssse3-char8 test/fqhex_test.cpp)
 target_compile_features(fqhex-test-ssse3-char8 PUBLIC cxx_std_20)
@@ -95,6 +103,14 @@ target_compile_features(fqhex-test-avx2-char PUBLIC cxx_std_20)
 target_compile_options(fqhex-test-avx2-char PRIVATE -DHAVE_AVX2=8)
 if (UNIX)
   target_compile_options(fqhex-test-avx2-char PRIVATE -Wall -D_GLIBCXX_DEBUG -mavx2)
+endif()
+
+# fqhex-test-avx2-wchar
+add_executable(fqhex-test-avx2-wchar test/fqhex_test.cpp)
+target_compile_features(fqhex-test-avx2-wchar PUBLIC cxx_std_20)
+target_compile_options(fqhex-test-avx2-wchar PRIVATE -DCHAR_MODE=1632 -DHAVE_AVX2=1632)
+if (UNIX)
+  target_compile_options(fqhex-test-avx2-wchar PRIVATE -Wall -D_GLIBCXX_DEBUG -mavx2)
 endif()
 
 # fqhex-test-avx2-char8
@@ -128,10 +144,12 @@ add_test(NAME generic-char8_t COMMAND fqhex-test-char8)
 add_test(NAME generic-char16_t COMMAND fqhex-test-char16)
 add_test(NAME generic-char32_t COMMAND fqhex-test-char32)
 add_test(NAME ssse3-char COMMAND fqhex-test-ssse3-char)
+add_test(NAME ssse3-wchar_t COMMAND fqhex-test-ssse3-wchar)
 add_test(NAME ssse3-char8_t COMMAND fqhex-test-ssse3-char8)
 add_test(NAME ssse3-char16_t COMMAND fqhex-test-ssse3-char16)
 add_test(NAME ssse3-char32_t COMMAND fqhex-test-ssse3-char32)
 add_test(NAME avx2-char COMMAND fqhex-test-avx2-char)
+add_test(NAME avx2-wchar_t COMMAND fqhex-test-avx2-wchar)
 add_test(NAME avx2-char8_t COMMAND fqhex-test-avx2-char8)
 add_test(NAME avx2-char16_t COMMAND fqhex-test-avx2-char16)
 add_test(NAME avx2-char32_t COMMAND fqhex-test-avx2-char32)

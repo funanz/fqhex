@@ -1,23 +1,11 @@
 // Copyright 2024 granz.fisherman@gmail.com
 // https://opensource.org/license/mit
-#if HAVE_SSSE3 == 8
-#   include <fqhex8_ssse3.hpp>
-#   define HEX_ENGINE fqhex::hex8_ssse3
-#elif HAVE_SSSE3 == 16
-#   include <fqhex16_ssse3.hpp>
-#   define HEX_ENGINE fqhex::hex16_ssse3
-#elif HAVE_SSSE3 == 32
-#   include <fqhex32_ssse3.hpp>
-#   define HEX_ENGINE fqhex::hex32_ssse3
-#elif HAVE_AVX2 == 8
-#   include <fqhex8_avx2.hpp>
-#   define HEX_ENGINE fqhex::hex8_avx2
-#elif HAVE_AVX2 == 16
-#   include <fqhex16_avx2.hpp>
-#   define HEX_ENGINE fqhex::hex16_avx2
-#elif HAVE_AVX2 == 32
-#   include <fqhex32_avx2.hpp>
-#   define HEX_ENGINE fqhex::hex32_avx2
+#if HAVE_SSSE3
+#   include <fqhex_ssse3.hpp>
+#   define HEX_ENGINE fqhex::hex_ssse3
+#elif HAVE_AVX2
+#   include <fqhex_avx2.hpp>
+#   define HEX_ENGINE fqhex::hex_avx2
 #else
 #   include <fqhex_generic.hpp>
 #   define HEX_ENGINE fqhex::hex_generic
@@ -288,7 +276,9 @@ int main()
         test_random();
         test_range();
 
-        std::cout << "All tests successful" << std::endl;
+        std::cout << "All tests successful."
+                  << " CharT=" << sizeof(CharT) * 8
+                  << std::endl;
         return 0;
     }
     catch (std::exception& e) {
