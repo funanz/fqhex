@@ -69,7 +69,7 @@ static String to_lower(const String& s)
     return result;
 }
 
-static void test_parse1()
+static void test_16_seq()
 {
     String s1 = S("0123456789abcdef0123456789ABCDEF");
 
@@ -83,11 +83,11 @@ static void test_parse1()
 
     String s2 = Hex::to_string(b1);
 
-    runtime_assert(b1 == b2, "test_parse1 #1");
-    runtime_assert(to_lower(s1) == s2, "test_parse1 #2");
+    runtime_assert(b1 == b2, "test_16_seq #1");
+    runtime_assert(to_lower(s1) == s2, "test_16_seq #2");
 }
 
-static void test_parse2()
+static void test_16()
 {
     String s1 = S("7c86ef21711c5d5e3a8408b5b305b49c");
 
@@ -102,11 +102,11 @@ static void test_parse2()
     String s2(b1.size() * 2, S('*'));
     Hex::to_string(b1, s2);
 
-    runtime_assert(b1 == b2, "test_parse2 #1");
-    runtime_assert(to_lower(s1) == s2, "test_parse2 #2");
+    runtime_assert(b1 == b2, "test_16_rand #1");
+    runtime_assert(to_lower(s1) == s2, "test_16_rand #2");
 }
 
-static void test_parse3()
+static void test_31()
 {
     String s1 = S("7c86ef21711c5d5e3a8408b5b305b49cAAAAAAAAAAAAAAAAbbbbbbbbCCCCdd");
 
@@ -125,11 +125,11 @@ static void test_parse3()
     String s2(b1.size() * 2, S('*'));
     Hex::to_string(b1, s2);
 
-    runtime_assert(b1 == b2, "test_parse3 #1");
-    runtime_assert(to_lower(s1) == s2, "test_parse3 #2");
+    runtime_assert(b1 == b2, "test_31 #1");
+    runtime_assert(to_lower(s1) == s2, "test_31 #2");
 }
 
-static void test_parse4()
+static void test_8()
 {
     String s1 = S("7c86ef21711c5d5e");
 
@@ -143,11 +143,11 @@ static void test_parse4()
     String s2(b1.size() * 2, S('*'));
     Hex::to_string(b1, s2);
 
-    runtime_assert(b1 == b2, "test_parse4 #1");
-    runtime_assert(to_lower(s1) == s2, "test_parse4 #2");
+    runtime_assert(b1 == b2, "test_8 #1");
+    runtime_assert(to_lower(s1) == s2, "test_8 #2");
 }
 
-static void test_parse5()
+static void test_4()
 {
     String s1 = S("7c86ef21");
     std::array<ByteT, 4> b1 { B(0x7c), B(0x86), B(0xef), B(0x21) };
@@ -158,11 +158,11 @@ static void test_parse5()
     String s2(b1.size() * 2, S('*'));
     Hex::to_string(b1, s2);
 
-    runtime_assert(b1 == b2, "test_parse5 #1");
-    runtime_assert(to_lower(s1) == s2, "test_parse5 #2");
+    runtime_assert(b1 == b2, "test_4 #1");
+    runtime_assert(to_lower(s1) == s2, "test_4 #2");
 }
 
-static void test_parse6()
+static void test_2()
 {
     String s1 = S("7c86");
     std::array<ByteT, 2> b1 { B(0x7c), B(0x86) };
@@ -173,11 +173,11 @@ static void test_parse6()
     String s2(b1.size() * 2, S('*'));
     Hex::to_string(b1, s2);
 
-    runtime_assert(b1 == b2, "test_parse6 #1");
-    runtime_assert(to_lower(s1) == s2, "test_parse6 #2");
+    runtime_assert(b1 == b2, "test_2 #1");
+    runtime_assert(to_lower(s1) == s2, "test_2 #2");
 }
 
-static void test_parse_unicode()
+static void test_16_unicode()
 {
 #if HAVE_UNICODE
     String s1 = S("\u0037c86ef21711c5d5e3a8408b5b305b49\U00000063");
@@ -193,8 +193,8 @@ static void test_parse_unicode()
     String s2(b1.size() * 2, S('*'));
     Hex::to_string(b1, s2);
 
-    runtime_assert(b1 == b2, "test_parse_unicode #1");
-    runtime_assert(to_lower(s1) == s2, "test_parse_unicode #2");
+    runtime_assert(b1 == b2, "test_16_unicode #1");
+    runtime_assert(to_lower(s1) == s2, "test_16_unicode #2");
 #endif
 }
 
@@ -266,7 +266,7 @@ static void test_parse_error_unicode()
 #endif
 }
 
-static void test_random()
+static void test_32_random()
 {
     std::mt19937_64 rng;
     std::array<uint64_t, 4> r;
@@ -288,7 +288,7 @@ static void test_random()
     }
 }
 
-static void test_range()
+static void test_16_range_error()
 {
     String s = S("7c86ef21711c5d5e3a8408b5b305b49c");
     std::array<ByteT, 16> b {
@@ -314,17 +314,17 @@ static void test_range()
 int main()
 {
     try {
-        test_parse1();
-        test_parse2();
-        test_parse3();
-        test_parse4();
-        test_parse5();
-        test_parse6();
-        test_parse_unicode();
+        test_16_seq();
+        test_16();
+        test_31();
+        test_8();
+        test_4();
+        test_2();
+        test_16_unicode();
         test_parse_error();
         test_parse_error_unicode();
-        test_random();
-        test_range();
+        test_32_random();
+        test_16_range_error();
 
         std::cout << "All tests successful."
                   << " CharT=" << sizeof(CharT) * 8
