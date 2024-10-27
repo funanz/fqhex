@@ -20,13 +20,13 @@ using test = fqhex::hex_perf_test<T>;
 
 int main()
 {
-    test<hex8> ("char").run();
-    test<hex16>("char16_t").run();
-    test<hex32>("char32_t").run();
-    test<sse8> ("char    \tssse3").run();
-    test<sse16>("char16_t\tssse3").run();
-    test<sse32>("char32_t\tssse3").run();
-    test<avx8> ("char    \tavx2").run();
-    test<avx16>("char16_t\tavx2").run();
-    test<avx32>("char32_t\tavx2").run();
+    test<hex8>("generic", "char    ").run();
+    test<hex16>("generic", "char16_t").run();
+    test<hex32>("generic", "char32_t").run();
+    test<sse8>("ssse3", "char    ").run();
+    test<sse16>("ssse3", "char16_t").run();
+    test<sse32>("ssse3", "char32_t").run();
+    test<avx8>("avx2", "char    ").run();
+    test<avx16>("avx2", "char16_t").run();
+    test<avx32>("avx2", "char32_t").run();
 }
