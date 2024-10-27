@@ -129,6 +129,54 @@ static void test_parse3()
     runtime_assert(to_lower(s1) == s2, "test_parse3 #2");
 }
 
+static void test_parse4()
+{
+    String s1 = S("7c86ef21711c5d5e");
+
+    std::array<ByteT, 8> b1 {
+        B(0x7c), B(0x86), B(0xef), B(0x21), B(0x71), B(0x1c), B(0x5d), B(0x5e),
+    };
+
+    std::array<ByteT, 8> b2;
+    Hex::to_bytes(s1, b2);
+
+    String s2(b1.size() * 2, S('*'));
+    Hex::to_string(b1, s2);
+
+    runtime_assert(b1 == b2, "test_parse4 #1");
+    runtime_assert(to_lower(s1) == s2, "test_parse4 #2");
+}
+
+static void test_parse5()
+{
+    String s1 = S("7c86ef21");
+    std::array<ByteT, 4> b1 { B(0x7c), B(0x86), B(0xef), B(0x21) };
+
+    std::array<ByteT, 4> b2;
+    Hex::to_bytes(s1, b2);
+
+    String s2(b1.size() * 2, S('*'));
+    Hex::to_string(b1, s2);
+
+    runtime_assert(b1 == b2, "test_parse5 #1");
+    runtime_assert(to_lower(s1) == s2, "test_parse5 #2");
+}
+
+static void test_parse6()
+{
+    String s1 = S("7c86");
+    std::array<ByteT, 2> b1 { B(0x7c), B(0x86) };
+
+    std::array<ByteT, 2> b2;
+    Hex::to_bytes(s1, b2);
+
+    String s2(b1.size() * 2, S('*'));
+    Hex::to_string(b1, s2);
+
+    runtime_assert(b1 == b2, "test_parse6 #1");
+    runtime_assert(to_lower(s1) == s2, "test_parse6 #2");
+}
+
 static void test_parse_unicode()
 {
 #if HAVE_UNICODE
@@ -269,6 +317,9 @@ int main()
         test_parse1();
         test_parse2();
         test_parse3();
+        test_parse4();
+        test_parse5();
+        test_parse6();
         test_parse_unicode();
         test_parse_error();
         test_parse_error_unicode();

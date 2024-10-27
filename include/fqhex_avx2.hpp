@@ -234,7 +234,7 @@ namespace fqhex
             for (size_t i = 0; i < count; i++)
                 to_string_128(&in[i * 16], &out[i * 32]);
 
-            if (in.size() % 8 > 0)
+            if (in.size() % 16 > 0)
                 hex_generic<CharT, ByteT>::to_string(in.subspan(count * 16), out.subspan(count * 32));
         }
 
