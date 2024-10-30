@@ -207,27 +207,35 @@ namespace fqhex
 
     public:
         static void to_bytes(std::span<const CharT> in, std::span<ByteT> out) {
-            if (out.size() * 2 < in.size())
-                throw std::invalid_argument("output span size is small");
+            if (in.size() >= 16) {
+                if (out.size() * 2 < in.size())
+                    throw std::invalid_argument("output span size is small");
 
-            auto count = in.size() / 16;
-            for (size_t i = 0; i < count; i++)
-                to_bytes_64(&in[i * 16], &out[i * 8]);
+                auto count = in.size() / 16;
+                for (size_t i = 0; i < count; i++)
+                    to_bytes_64(&in[i * 16], &out[i * 8]);
 
-            if (in.size() % 16 >= 2)
-                hex_generic<CharT, ByteT>::to_bytes(in.subspan(count * 16), out.subspan(count * 8));
+                if (in.size() % 16 >= 2)
+                    hex_generic<CharT, ByteT>::to_bytes(in.subspan(count * 16), out.subspan(count * 8));
+            } else {
+                hex_generic<CharT, ByteT>::to_bytes(in, out);
+            }
         }
 
         static void to_string(std::span<const ByteT> in, std::span<CharT> out) {
-            if (out.size() < in.size() * 2)
-                throw std::invalid_argument("output span size is small");
+            if (in.size() >= 8) {
+                if (out.size() < in.size() * 2)
+                    throw std::invalid_argument("output span size is small");
 
-            auto count = in.size() / 8;
-            for (size_t i = 0; i < count; i++)
-                to_string_64(&in[i * 8], &out[i * 16]);
+                auto count = in.size() / 8;
+                for (size_t i = 0; i < count; i++)
+                    to_string_64(&in[i * 8], &out[i * 16]);
 
-            if (in.size() % 8 > 0)
-                hex_generic<CharT, ByteT>::to_string(in.subspan(count * 8), out.subspan(count * 16));
+                if (in.size() % 8 > 0)
+                    hex_generic<CharT, ByteT>::to_string(in.subspan(count * 8), out.subspan(count * 16));
+            } else {
+                hex_generic<CharT, ByteT>::to_string(in, out);
+            }
         }
 
         static auto to_string(std::span<const ByteT> in) {

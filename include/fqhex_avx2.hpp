@@ -7,6 +7,7 @@
 #include <string>
 #include <immintrin.h>
 #include "fqhex_generic.hpp"
+#include "fqhex_ssse3.hpp"
 
 namespace fqhex::detail
 {
@@ -215,27 +216,35 @@ namespace fqhex
 
     public:
         static void to_bytes(std::span<const CharT> in, std::span<ByteT> out) {
-            if (out.size() * 2 < in.size())
-                throw std::invalid_argument("output span size is small");
+            if (in.size() >= 32) {
+                if (out.size() * 2 < in.size())
+                    throw std::invalid_argument("output span size is small");
 
-            auto count = in.size() / 32;
-            for (size_t i = 0; i < count; i++)
-                to_bytes_128(&in[i * 32], &out[i * 16]);
+                auto count = in.size() / 32;
+                for (size_t i = 0; i < count; i++)
+                    to_bytes_128(&in[i * 32], &out[i * 16]);
 
-            if (in.size() % 32 >= 2)
-                hex_generic<CharT, ByteT>::to_bytes(in.subspan(count * 32), out.subspan(count * 16));
+                if (in.size() % 32 >= 2)
+                    hex_generic<CharT, ByteT>::to_bytes(in.subspan(count * 32), out.subspan(count * 16));
+            } else {
+                hex_ssse3<CharT, ByteT>::to_bytes(in, out);
+            }
         }
 
         static void to_string(std::span<const ByteT> in, std::span<CharT> out) {
-            if (out.size() < in.size() * 2)
-                throw std::invalid_argument("output span size is small");
+            if (in.size() >= 16) {
+                if (out.size() < in.size() * 2)
+                    throw std::invalid_argument("output span size is small");
 
-            auto count = in.size() / 16;
-            for (size_t i = 0; i < count; i++)
-                to_string_128(&in[i * 16], &out[i * 32]);
+                auto count = in.size() / 16;
+                for (size_t i = 0; i < count; i++)
+                    to_string_128(&in[i * 16], &out[i * 32]);
 
-            if (in.size() % 16 > 0)
-                hex_generic<CharT, ByteT>::to_string(in.subspan(count * 16), out.subspan(count * 32));
+                if (in.size() % 16 > 0)
+                    hex_generic<CharT, ByteT>::to_string(in.subspan(count * 16), out.subspan(count * 32));
+            } else {
+                hex_ssse3<CharT, ByteT>::to_string(in, out);
+            }
         }
 
         static auto to_string(std::span<const ByteT> in) {
