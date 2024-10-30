@@ -1,11 +1,11 @@
 // Copyright 2024 granz.fisherman@gmail.com
 // https://opensource.org/license/mit
-#if HAVE_SSSE3
-#   include <fqhex_ssse3.hpp>
-#   define HEX_ENGINE fqhex::hex_ssse3
-#elif HAVE_AVX2
+#if HAVE_AVX2
 #   include <fqhex_avx2.hpp>
 #   define HEX_ENGINE fqhex::hex_avx2
+#elif HAVE_SSSE3
+#   include <fqhex_ssse3.hpp>
+#   define HEX_ENGINE fqhex::hex_ssse3
 #else
 #   include <fqhex_generic.hpp>
 #   define HEX_ENGINE fqhex::hex_generic

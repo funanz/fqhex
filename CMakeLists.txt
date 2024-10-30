@@ -11,11 +11,27 @@ project(fqhex)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# hex-perf-test
-add_executable(fqhex-perf-test perf/fqhex_perf_test.cpp)
-target_compile_features(fqhex-perf-test PUBLIC cxx_std_20)
+# hex-perf-test-generic
+add_executable(fqhex-perf-test-generic perf/fqhex_perf_test.cpp)
+target_compile_features(fqhex-perf-test-generic PUBLIC cxx_std_20)
 if (UNIX)
-  target_compile_options(fqhex-perf-test PRIVATE -Wall -mavx2)
+  target_compile_options(fqhex-perf-test-generic PRIVATE -Wall)
+endif()
+
+# hex-perf-test-ssse3
+add_executable(fqhex-perf-test-ssse3 perf/fqhex_perf_test.cpp)
+target_compile_features(fqhex-perf-test-ssse3 PUBLIC cxx_std_20)
+target_compile_options(fqhex-perf-test-ssse3 PRIVATE -DHAVE_SSSE3=1)
+if (UNIX)
+  target_compile_options(fqhex-perf-test-ssse3 PRIVATE -Wall -mssse3)
+endif()
+
+# hex-perf-test-avx2
+add_executable(fqhex-perf-test-avx2 perf/fqhex_perf_test.cpp)
+target_compile_features(fqhex-perf-test-avx2 PUBLIC cxx_std_20)
+target_compile_options(fqhex-perf-test-avx2 PRIVATE -DHAVE_AVX2=1)
+if (UNIX)
+  target_compile_options(fqhex-perf-test-avx2 PRIVATE -Wall -mavx2)
 endif()
 
 # fqhex-test-char

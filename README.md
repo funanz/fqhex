@@ -5,11 +5,13 @@
     $ cmake ..
     $ make
     $ make test
-    $ ./fqhex-perf-test
+    $ ./fqhex-perf-test-generic
      0:01.000790524	152.78 M op/s	to_bytes	char    	32	generic
      0:01.001119847	269.90 M op/s	to_bytes	char    	16	generic
      0:01.000606484	541.17 M op/s	to_bytes	char    	8	generic
-
+    ...
+    $ ./fqhex-perf-test-ssse3
+    $ ./fqhex-perf-test-avx2
 
 # Features
 - Converts hexadecimal strings to byte arrays.
