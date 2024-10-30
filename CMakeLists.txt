@@ -34,43 +34,43 @@ if (UNIX)
   target_compile_options(fqhex-perf-test-avx2 PRIVATE -Wall -mavx2)
 endif()
 
-# fqhex-test-char
-add_executable(fqhex-test-char test/fqhex_test.cpp)
-target_compile_features(fqhex-test-char PUBLIC cxx_std_20)
+# fqhex-test-generic-char
+add_executable(fqhex-test-generic-char test/fqhex_test.cpp)
+target_compile_features(fqhex-test-generic-char PUBLIC cxx_std_20)
 if (UNIX)
-  target_compile_options(fqhex-test-char PRIVATE -Wall -D_GLIBCXX_DEBUG)
+  target_compile_options(fqhex-test-generic-char PRIVATE -Wall -D_GLIBCXX_DEBUG)
 endif()
 
-# fqhex-test-wchar
-add_executable(fqhex-test-wchar test/fqhex_test.cpp)
-target_compile_features(fqhex-test-wchar PUBLIC cxx_std_20)
-target_compile_options(fqhex-test-wchar PRIVATE -DCHAR_MODE=1632)
+# fqhex-test-generic-wchar
+add_executable(fqhex-test-generic-wchar test/fqhex_test.cpp)
+target_compile_features(fqhex-test-generic-wchar PUBLIC cxx_std_20)
+target_compile_options(fqhex-test-generic-wchar PRIVATE -DCHAR_MODE=1632)
 if (UNIX)
-  target_compile_options(fqhex-test-wchar PRIVATE -Wall -D_GLIBCXX_DEBUG)
+  target_compile_options(fqhex-test-generic-wchar PRIVATE -Wall -D_GLIBCXX_DEBUG)
 endif()
 
-# fqhex-test-char8
-add_executable(fqhex-test-char8 test/fqhex_test.cpp)
-target_compile_features(fqhex-test-char8 PUBLIC cxx_std_20)
-target_compile_options(fqhex-test-char8 PRIVATE -DCHAR_MODE=8)
+# fqhex-test-generic-char8
+add_executable(fqhex-test-generic-char8 test/fqhex_test.cpp)
+target_compile_features(fqhex-test-generic-char8 PUBLIC cxx_std_20)
+target_compile_options(fqhex-test-generic-char8 PRIVATE -DCHAR_MODE=8)
 if (UNIX)
-  target_compile_options(fqhex-test-char8 PRIVATE -Wall -D_GLIBCXX_DEBUG)
+  target_compile_options(fqhex-test-generic-char8 PRIVATE -Wall -D_GLIBCXX_DEBUG)
 endif()
 
-# fqhex-test-char16
-add_executable(fqhex-test-char16 test/fqhex_test.cpp)
-target_compile_features(fqhex-test-char16 PUBLIC cxx_std_20)
-target_compile_options(fqhex-test-char16 PRIVATE -DCHAR_MODE=16)
+# fqhex-test-generic-char16
+add_executable(fqhex-test-generic-char16 test/fqhex_test.cpp)
+target_compile_features(fqhex-test-generic-char16 PUBLIC cxx_std_20)
+target_compile_options(fqhex-test-generic-char16 PRIVATE -DCHAR_MODE=16)
 if (UNIX)
-  target_compile_options(fqhex-test-char16 PRIVATE -Wall -D_GLIBCXX_DEBUG)
+  target_compile_options(fqhex-test-generic-char16 PRIVATE -Wall -D_GLIBCXX_DEBUG)
 endif()
 
-# fqhex-test-char32
-add_executable(fqhex-test-char32 test/fqhex_test.cpp)
-target_compile_features(fqhex-test-char32 PUBLIC cxx_std_20)
-target_compile_options(fqhex-test-char32 PRIVATE -DCHAR_MODE=32)
+# fqhex-test-generic-char32
+add_executable(fqhex-test-generic-char32 test/fqhex_test.cpp)
+target_compile_features(fqhex-test-generic-char32 PUBLIC cxx_std_20)
+target_compile_options(fqhex-test-generic-char32 PRIVATE -DCHAR_MODE=32)
 if (UNIX)
-  target_compile_options(fqhex-test-char32 PRIVATE -Wall -D_GLIBCXX_DEBUG)
+  target_compile_options(fqhex-test-generic-char32 PRIVATE -Wall -D_GLIBCXX_DEBUG)
 endif()
 
 # fqhex-test-ssse3-char
@@ -154,11 +154,11 @@ if (UNIX)
 endif()
 
 enable_testing()
-add_test(NAME generic-char COMMAND fqhex-test-char)
-add_test(NAME generic-wchar_t COMMAND fqhex-test-wchar)
-add_test(NAME generic-char8_t COMMAND fqhex-test-char8)
-add_test(NAME generic-char16_t COMMAND fqhex-test-char16)
-add_test(NAME generic-char32_t COMMAND fqhex-test-char32)
+add_test(NAME generic-char COMMAND fqhex-test-generic-char)
+add_test(NAME generic-wchar_t COMMAND fqhex-test-generic-wchar)
+add_test(NAME generic-char8_t COMMAND fqhex-test-generic-char8)
+add_test(NAME generic-char16_t COMMAND fqhex-test-generic-char16)
+add_test(NAME generic-char32_t COMMAND fqhex-test-generic-char32)
 add_test(NAME ssse3-char COMMAND fqhex-test-ssse3-char)
 add_test(NAME ssse3-wchar_t COMMAND fqhex-test-ssse3-wchar)
 add_test(NAME ssse3-char8_t COMMAND fqhex-test-ssse3-char8)
