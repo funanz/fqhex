@@ -311,6 +311,9 @@ static void test_16_range_error()
     catch (std::invalid_argument&) {}
 }
 
+#define V_TO_S(v) #v
+#define TO_S(m) V_TO_S(m)
+
 int main()
 {
     try {
@@ -326,8 +329,10 @@ int main()
         test_32_random();
         test_16_range_error();
 
-        std::cout << "All tests successful."
-                  << " CharT=" << sizeof(CharT) * 8
+        std::cout << "All tests successful.\t"
+                  << TO_S(HEX_ENGINE) << "<"
+                  << TO_S(CHAR_T) << ", "
+                  << TO_S(BYTE_T) << ">"
                   << std::endl;
         return 0;
     }
